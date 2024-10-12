@@ -1,2 +1,2 @@
 # Uber-2.0
-An advanced financial technology app providing users with intuitive tools for managing investments, personal finance, and payments, incorporating AI-driven insights for smarter decision-making.
+A modern ride-hailing app with enhanced user experience, offering real-time ride tracking, optimized route suggestions, and integration of various payment options for a smoother commute experience.
