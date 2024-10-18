@@ -8,9 +8,13 @@ import {
 } from "react-native";
 import { SignedIn, useUser } from "@clerk/clerk-expo";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { icons } from "@/constants";
+import { icons, images } from "@/constants";
 import RideCard from "@/components/RideCard";
-
+import GoogleTextInput from "@/components/GoogleTextInput";
+import Map from "@/components/Map";
+import { useLocationStore } from "@/store";
+import { useEffect, useState } from "react";
+import * as Location from "expo-location";
 const recentRides = [
   {
     ride_id: "1",
@@ -120,8 +124,32 @@ const recentRides = [
 
 const Home = () => {
   const { user } = useUser();
+  const loading = false;
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
 
   function handleSignOut() {}
+  function handleDestinationPress() {}
+
+  useEffect(() => {
+    const requestLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        setHasPermissions(false);
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync();
+
+      const address = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        address: `${address[0].name},${address[0].region}`,
+      });
+    };
+    requestLocation();
+  }, []);
 
   return (
     <SafeAreaView>
@@ -156,7 +184,10 @@ const Home = () => {
             <>
               <View className="flex flex-row items-center justify-between my-5">
                 <Text className="text-2xl font-JakartaExtraBold">
-                  Welcome {user?.firstName}👋
+                  Welcome{", "}
+                  {user?.firstName ||
+                    user?.emailAddresses[0].emailAddress.split("@")[0]}
+                  👋
                 </Text>
                 <TouchableOpacity
                   onPress={handleSignOut}
@@ -165,13 +196,17 @@ const Home = () => {
                   <Image source={icons.out} className="w-4 h-4" />
                 </TouchableOpacity>
               </View>
-              {/*TODO Google Text*/}
+              <GoogleTextInput
+                icon={icons.search}
+                containerStyle="bg-white shadow-md shadow-neutral-300"
+                handlePress={handleDestinationPress}
+              />
               <>
                 <Text className="text-xl font-JakartaBold mt-5 mb-3">
                   Your current location
                 </Text>
                 <View className="flex flex-row items-center bg-transparent h-[300px]">
-                  {/*TODO Map component*/}
+                  <Map />
                 </View>
               </>
 
