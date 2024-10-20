@@ -1,4 +1,5 @@
 import { Redirect } from "expo-router";
+import "react-native-get-random-values";
 import { useAuth } from "@clerk/clerk-expo";
 const Home = () => {
   const { isSignedIn } = useAuth();
