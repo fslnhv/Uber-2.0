@@ -8,19 +8,8 @@ import { useDriverStore, useLocationStore } from "@/store";
 import Payment from "@/components/Payment";
 
 import { StripeProvider } from "@stripe/stripe-react-native";
-import { useEffect, useState } from "react";
 
 const BookRide = () => {
-  const [publishableKey, setPublishableKey] = useState("");
-
-  const fetchPublishableKey = async () => {
-    // const key = await fetchKey(); // fetch key from your server here
-    // setPublishableKey(key);
-  };
-
-  useEffect(() => {
-    fetchPublishableKey();
-  }, []);
   const { user } = useUser();
   const { userAddress, destinationAddress } = useLocationStore();
   const { drivers, selectedDriver } = useDriverStore();
@@ -31,9 +20,9 @@ const BookRide = () => {
 
   return (
     <StripeProvider
-      publishableKey={publishableKey}
-      merchantIdentifier="merchant.identifier" // required for Apple Pay
-      urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+      publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
+      merchantIdentifier="merchant.uber.com"
+      urlScheme="myapp"
     >
       <RideLayout title="Book Ride">
         <>
@@ -104,7 +93,13 @@ const BookRide = () => {
             </View>
           </View>
 
-          <Payment />
+          <Payment
+            fullName={user?.fullName!}
+            email={user?.emailAddresses[0].emailAddress!}
+            amount={driverDetails?.price!}
+            driverId={driverDetails?.id}
+            rideTime={driverDetails?.time!}
+          />
         </>
       </RideLayout>
     </StripeProvider>
