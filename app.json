@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Uber-2.0",
-    "slug": "Uber-2.0",
+    "slug": "uber-20",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -36,6 +36,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dcced4fa-4dcd-436a-ba20-c3d573616c29"
+      }
+    },
+    "owner": "benjyy"
   }
 }
